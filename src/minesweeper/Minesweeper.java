@@ -16,6 +16,7 @@ import java.util.Random;
 public class Minesweeper {
     private final Cell[][] grid;
     private int bombs;
+    private boolean gameOver;
     
     public Minesweeper(int height, int width, int b) {
         grid = new Cell[height+2][width+2];
@@ -46,6 +47,7 @@ public class Minesweeper {
             }
         }
         
+        gameOver = false;
     }
     
     /**
@@ -111,6 +113,7 @@ public class Minesweeper {
         
         if (number == -1) {
             System.out.println("gg");
+            gameOver = true;
             for (int row = 1; row < grid.length - 1; row++) {
                 for (int column = 1; column < grid[row].length - 1; column++) {
                     if (grid[row][column].getValue() == -1) {
@@ -118,20 +121,30 @@ public class Minesweeper {
                     }
                 }
             }
-        } else if (number >= 1 && number <= 8) {           
-            grid[cellRow+1][cellColumn+1].setRevealed(true);
-        } else if (number == 0) {
-            revealCell(cellRow-1, cellColumn-1);
-            revealCell(cellRow-1, cellColumn);
-            revealCell(cellRow-1, cellColumn+1);
-            revealCell(cellRow, cellColumn-1);
-            revealCell(cellRow, cellColumn+1);
-            revealCell(cellRow+1, cellColumn-1);
-            revealCell(cellRow+1, cellColumn);
-            revealCell(cellRow+1, cellColumn+1);
         } else {
-            System.err.println("Error: invalid cell value.");
+            if (number == 0) {
+                revealCell(cellRow - 1, cellColumn - 1);
+                revealCell(cellRow - 1, cellColumn);
+                revealCell(cellRow - 1, cellColumn + 1);
+                revealCell(cellRow, cellColumn - 1);
+                revealCell(cellRow, cellColumn + 1);
+                revealCell(cellRow + 1, cellColumn - 1);
+                revealCell(cellRow + 1, cellColumn);
+                revealCell(cellRow + 1, cellColumn + 1);
+            } 
+            gameOver = true;
+            for (int row = 1; row < grid.length - 1; row++) {
+                for (int column = 1; column < grid[row].length - 1; column++) {
+                    if (grid[row][column].getValue() != -1 && !grid[row][column].isRevealed()) {
+                        gameOver = false;
+                    }
+                }
+            }
         }
+    }
+    
+    public boolean gameIsOver() {
+        return gameOver;
     }
     
     /**

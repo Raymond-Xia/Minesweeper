@@ -172,7 +172,6 @@ public class MinesweeperGUI {
                         displayedGrid[row][column] = new JButton();
                         displayedGrid[row][column].setPreferredSize(new Dimension(20,20));
                         displayedGrid[row][column].setBackground(Color.gray);
-                        displayedGrid[row][column].setForeground(Color.gray);
                         displayedGrid[row][column].setOpaque(true);
                         displayedGrid[row][column].setBorder(BorderFactory.createLineBorder(new Color(153,153,153)));
                         displayedGrid[row][column].addActionListener(new GridListener());
@@ -308,6 +307,13 @@ public class MinesweeperGUI {
             int y = coordinates[0];
             
             board.revealCell(y, x);
+            if (board.gameIsOver()) {
+                for (int row = 0; row < displayedGrid.length; row++) {
+                    for (int column = 0; column < displayedGrid[row].length; column++) {
+                        displayedGrid[row][column].setEnabled(false);
+                    } 
+                }
+            }
             display();
         }
         
@@ -348,12 +354,38 @@ public class MinesweeperGUI {
             for (int column = 1; column < grid[row].length-1; column++) {
                 if (grid[row][column].isRevealed()) {
                     displayedGrid[row-1][column-1].setBackground(Color.lightGray);
+                    
                     if (grid[row][column].getValue() >= 1 && grid[row][column].getValue() <= 8) {
-                        displayedGrid[row-1][column-1].setForeground(Color.blue);
                         displayedGrid[row-1][column-1].setText(grid[row][column].getValue() + "");
                     } else if (grid[row][column].getValue() == -1) {
-                        displayedGrid[row-1][column-1].setForeground(Color.black);
-                        displayedGrid[row-1][column-1].setText("x");
+                        displayedGrid[row - 1][column - 1].setText("x");
+                    }
+
+                    switch (grid[row][column].getValue()) {
+                        case -1:
+                            displayedGrid[row-1][column-1].setForeground(Color.black);
+                            break;
+                        case 1:
+                            displayedGrid[row-1][column-1].setForeground(Color.blue);
+                            break;
+                        case 2:
+                            displayedGrid[row-1][column-1].setForeground(Color.green);
+                            break;
+                        case 3:
+                            displayedGrid[row-1][column-1].setForeground(Color.red);
+                            break;
+                        case 4:
+                            displayedGrid[row-1][column-1].setForeground(Color.darkGray);
+                            break;
+                        case 5:
+                            displayedGrid[row-1][column-1].setForeground(Color.magenta);
+                            break;
+                        case 6:
+                            displayedGrid[row-1][column-1].setForeground(Color.CYAN);
+                            break;
+                        default: 
+                            displayedGrid[row - 1][column - 1].setForeground(Color.black);
+                            break;
                     }
                 }
             }
