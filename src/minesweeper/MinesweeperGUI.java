@@ -32,7 +32,7 @@ public class MinesweeperGUI {
     JButton[][] displayedGrid;
     private int[][] consoleGrid;   
 //    private int[][] savedPattern;
-//    JButton next, start, clear;  
+    JButton reset;  
 //    Timer timer;
 //    JMenuBar menubar;
 //    JMenu file, help;
@@ -187,26 +187,15 @@ public class MinesweeperGUI {
                 
                 display();
 
-//                // Next Button
-//                next = new JButton("Next");
-//                next.addActionListener(new NextListener());
-//                c.gridx = 0;
-//                c.gridy = 2;
-//                c.gridwidth = 1;
-//                c.gridheight = 1;
-//                c.insets = new Insets(10,0,0,0);
-//                mainPanel.add(next, c);
-//
-//                // Start Button
-//                start = new JButton("Start");
-//                start.setActionCommand("Start");
-//                start.addActionListener(new StartStopListener());
-//                start.setPreferredSize(new Dimension(62,26));
-//                c.gridx = 1;
-//                c.gridy = 2;
-//                c.gridwidth = 1;
-//                c.gridheight = 1;
-//                mainPanel.add(start, c);
+                reset = new JButton(":)");
+                reset.setActionCommand(":)");
+                reset.addActionListener(new ResetListener());
+                reset.setPreferredSize(new Dimension(62,26));
+                c.gridx = 1;
+                c.gridy = 2;
+                c.gridwidth = 1;
+                c.gridheight = 1;
+                mainPanel.add(reset, c);
 //
 //                // Timer 
 //                timer = new Timer(500, new NextListener());
@@ -336,10 +325,16 @@ public class MinesweeperGUI {
         }
     }
     
-    class ClearListener implements ActionListener {
+    class ResetListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+            for (int row = 0; row < displayedGrid.length; row++) {
+                for (int column = 0; column < displayedGrid[row].length; column++) {
+                    displayedGrid[row][column].setEnabled(true);
+                }
+            }
+            board.resetGame();
+            display();
         }
     }
     
@@ -387,6 +382,9 @@ public class MinesweeperGUI {
                             displayedGrid[row - 1][column - 1].setForeground(Color.black);
                             break;
                     }
+                } else {
+                    displayedGrid[row-1][column-1].setText("");
+                    displayedGrid[row-1][column-1].setBackground(Color.gray);
                 }
             }
         }

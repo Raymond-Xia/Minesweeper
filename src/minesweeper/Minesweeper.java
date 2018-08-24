@@ -16,9 +16,12 @@ import java.util.Random;
 public class Minesweeper {
     private final Cell[][] grid;
     private int bombs;
+    private int height, width;
     private boolean gameOver;
     
-    public Minesweeper(int height, int width, int b) {
+    public Minesweeper(int h, int w, int b) {
+        height = h;
+        width = w;
         grid = new Cell[height+2][width+2];
         for (int row = 0; row < grid.length; row++) {
             for (int column = 0; column < grid[0].length; column++) {
@@ -50,18 +53,34 @@ public class Minesweeper {
         gameOver = false;
     }
     
-    /**
-     * Set all grid cells to blank
-     * pre: none
-     * post: each int in grid is set to 0
-     */
-    public void resetCells() {
+    public void resetGame() {
+        
         for (int row = 1; row < grid.length-1; row++) {
             for (int column = 1; column < grid[row].length-1; column++) {
                 grid[row][column].setValue(0);
                 grid[row][column].setRevealed(false);
             }
         }
+        
+        Random r = new Random();
+        int x, y;
+        for (int i = 0; i < bombs; i++) {
+            do {
+                x = r.nextInt(width);
+                y = r.nextInt(height);
+            } while (grid[y + 1][x + 1].getValue() == -1);
+            grid[y+1][x+1].setValue(-1);
+        }
+
+        for (int row = 1; row < grid.length - 1; row++) {
+            for (int column = 1; column < grid[0].length - 1; column++) {
+                if (grid[row][column].getValue() != -1) {
+                    grid[row][column].setValue(countBombs(row, column));
+                }
+            }
+        }
+
+        gameOver = false;
     }
     
     /**
