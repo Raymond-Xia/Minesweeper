@@ -163,6 +163,7 @@ public class MinesweeperGUI {
                 gridPanel.setBackground(Color.lightGray);
                 gridPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
                 gridPanel.setLayout(new GridLayout(16, 30));
+                gridPanel.addMouseListener(new FlagListener());
                 
                 board = new Minesweeper(16, 30, 99);
                 
@@ -298,7 +299,7 @@ public class MinesweeperGUI {
 //        }
 //    }
     }
-    
+
     class GridListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -326,6 +327,32 @@ public class MinesweeperGUI {
             return coordsArray;
         }
         
+    }
+    
+    class FlagListener implements MouseListener {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (SwingUtilities.isRightMouseButton(e)) {
+//                if (e.)
+            }
+            System.out.println(e.getX() + ", " + e.getY());
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+        }
     }
         
     class StartStopListener implements ActionListener {
