@@ -8,7 +8,6 @@ package minesweeper;
 
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -16,22 +15,14 @@ import java.awt.event.*;
  *
  * @author Raymond
  */
-public class MinesweeperGUI {
-//    JFrame introWindow;
-//    JPanel introPanel;
-//    JLabel introMinesweeperTitle, scalePrompt;
-//    JComboBox diffComboBox;
-//    JButton play;
-    
+public class MinesweeperGUI {    
     JFrame gameWindow;
     JPanel mainPanel;
     JPanel gridPanel;
     JLabel gameLifeTitle;
 //    private int steps;
-    private Minesweeper board;
+    private final Minesweeper board;
     JButton[][] displayedGrid;
-    private int[][] consoleGrid;   
-//    private int[][] savedPattern;
     JButton reset;  
 //    Timer timer;
 //    JMenuBar menubar;
@@ -39,186 +30,102 @@ public class MinesweeperGUI {
 //    JMenuItem save, load, quit, rules, about;    
     
     public MinesweeperGUI() {
-//        /* Intro Window */    
-//        introWindow = new JFrame("LifeGUI");
-//        introWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        
-//        // Intro Panel
-//        introPanel = new JPanel();
-//        introPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-//        introPanel.setLayout(new GridBagLayout());
-//        GridBagConstraints c = new GridBagConstraints();
-//        
-//        // Intro Title
-//        introMinesweeperTitle = new JLabel("Minesweeper");
-//        Font f = new Font("Century Gothic", Font.PLAIN, 40);
-//        introMinesweeperTitle.setFont(f);
-//        c.gridx = 0;
-//        c.gridy = 0;
-//        c.gridwidth = 2;
-//        c.gridheight = 1;
-//        c.insets = new Insets(5,5,5,5);
-//        introPanel.add(introMinesweeperTitle, c);
-//        
-//        // Difficulty Prompt
-//        scalePrompt = new JLabel("Choose a difficulty: ", JLabel.TRAILING);
-//        c.gridx = 0;
-//        c.gridy = 1;
-//        c.gridwidth = 1;
-//        c.gridheight = 1;
-//        c.weightx = 0.5;
-//        c.anchor = GridBagConstraints.EAST;
-//        introPanel.add(scalePrompt, c);
-        
-//        // Difficulty Combo Box
-//        String[] difficulties = {"Beginner", "Intermediate", "Expert"};
-//        diffComboBox = new JComboBox(difficulties);
-//        diffComboBox.addActionListener(new DifficultyListener());
-//        c.gridx = 1;
-//        c.gridy = 1;
-//        c.gridwidth = 1;
-//        c.gridheight = 1;
-//        c.weightx = 0.5;
-//        c.anchor = GridBagConstraints.WEST;        
-//        introPanel.add(diffComboBox, c);
-        
-//        // Play Button
-//        play = new JButton("Play");
-//        play.addActionListener(new PlayListener());
-//        c.gridx = 0;
-//        c.gridy = 2;
-//        c.gridwidth = 2;
-//        c.gridheight = 1;
-//        c.anchor = GridBagConstraints.CENTER;
-//        introPanel.add(play, c);
-//        
-//        introWindow.setContentPane(introPanel);
-//        introWindow.pack();
-//        introWindow.setVisible(true);       
-//    }
+        /* Game Window */
+        gameWindow = new JFrame("LifeGUI");
+        gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+//        // Menu Bar
+//        menubar = new JMenuBar();
+//        gameWindow.setJMenuBar(menubar);
+//
+//        file = new JMenu("File");                
+//        save = new JMenuItem("Save");
+//        save.addActionListener(new MenuListener());
+//        save.setActionCommand("Save");
+//        savedPattern = new int[scale][scale];
+//        file.add(save);
+//        load = new JMenuItem("Load");
+//        load.addActionListener(new MenuListener());
+//        load.setActionCommand("Load");
+//        file.add(load);
+//        quit = new JMenuItem("Quit");
+//        quit.addActionListener(new MenuListener());
+//        quit.setActionCommand("Quit");
+//        file.add(quit);
+//        menubar.add(file);
+//
+//        help = new JMenu("Help");                
+//        rules = new JMenuItem("Rules");
+//        rules.addActionListener(new MenuListener());
+//        rules.setActionCommand("Rules");
+//        help.add(rules);
+//        about = new JMenuItem("About");
+//        about.addActionListener(new MenuListener());
+//        about.setActionCommand("About");
+//        help.add(about);
+//        menubar.add(help);
     
-//    class PlayListener implements ActionListener {
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            scale = Integer.parseInt(scaleTextInput.getText());
-//            if (scale < 50){
-//                scalePrompt.setText("Must be at least 50!");
-//            } else {                
-//                introWindow.setVisible(false);
-//                introWindow.dispose();
+        // Main Panel
+        mainPanel = new JPanel();
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        mainPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
 
-                /* Game Window */
-                gameWindow = new JFrame("LifeGUI");
-                gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Minesweeper Title
+        gameLifeTitle = new JLabel("Minesweeper");
+        Font f = new Font("Century Gothic", Font.BOLD, 30);
+        gameLifeTitle.setFont(f);
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 6;
+        c.gridheight = 1;
+        mainPanel.add(gameLifeTitle, c);
 
-//                // Menu Bar
-//                menubar = new JMenuBar();
-//                gameWindow.setJMenuBar(menubar);
-//
-//                file = new JMenu("File");                
-//                save = new JMenuItem("Save");
-//                save.addActionListener(new MenuListener());
-//                save.setActionCommand("Save");
-//                savedPattern = new int[scale][scale];
-//                file.add(save);
-//                load = new JMenuItem("Load");
-//                load.addActionListener(new MenuListener());
-//                load.setActionCommand("Load");
-//                file.add(load);
-//                quit = new JMenuItem("Quit");
-//                quit.addActionListener(new MenuListener());
-//                quit.setActionCommand("Quit");
-//                file.add(quit);
-//                menubar.add(file);
-//
-//                help = new JMenu("Help");                
-//                rules = new JMenuItem("Rules");
-//                rules.addActionListener(new MenuListener());
-//                rules.setActionCommand("Rules");
-//                help.add(rules);
-//                about = new JMenuItem("About");
-//                about.addActionListener(new MenuListener());
-//                about.setActionCommand("About");
-//                help.add(about);
-//                menubar.add(help);
+        // Grid
+        gridPanel = new JPanel();
+        gridPanel.setBackground(Color.lightGray);
+        gridPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        gridPanel.setLayout(new GridLayout(16, 30));
 
-                // Main Panel
-                mainPanel = new JPanel();
-                mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-                mainPanel.setLayout(new GridBagLayout());
-                GridBagConstraints c = new GridBagConstraints();
+        board = new Minesweeper(16, 30, 99);
 
-                // Minesweeper Title
-                gameLifeTitle = new JLabel("Minesweeper");
-                Font f = new Font("Century Gothic", Font.BOLD, 30);
-                gameLifeTitle.setFont(f);
-                c.gridx = 0;
-                c.gridy = 0;
-                c.gridwidth = 6;
-                c.gridheight = 1;
-                mainPanel.add(gameLifeTitle, c);
+        displayedGrid = new JButton[16][30];                
+        for (int row = 0; row < displayedGrid.length; row++) {
+            for (int column = 0; column < displayedGrid[row].length; column++) {
+                displayedGrid[row][column] = new JButton();
+                displayedGrid[row][column].setPreferredSize(new Dimension(40,40));
+                displayedGrid[row][column].setBackground(Color.gray);
+                displayedGrid[row][column].setOpaque(true);
+                displayedGrid[row][column].setBorder(BorderFactory.createLineBorder(new Color(153,153,153)));
+                displayedGrid[row][column].addActionListener(new GridListener());
+                displayedGrid[row][column].setActionCommand(row + "," + column);
+                gridPanel.add(displayedGrid[row][column]);
+            }
+        }
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 6;
+        c.gridheight = 1;
+        mainPanel.add(gridPanel, c);
 
-                // Grid
-                gridPanel = new JPanel();
-                gridPanel.setBackground(Color.lightGray);
-                gridPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-                gridPanel.setLayout(new GridLayout(16, 30));
-                
-                board = new Minesweeper(16, 30, 99);
-                
-                displayedGrid = new JButton[16][30];                
-                for (int row = 0; row < displayedGrid.length; row++) {
-                    for (int column = 0; column < displayedGrid[row].length; column++) {
-                        displayedGrid[row][column] = new JButton();
-                        displayedGrid[row][column].setPreferredSize(new Dimension(40,40));
-                        displayedGrid[row][column].setBackground(Color.gray);
-                        displayedGrid[row][column].setOpaque(true);
-                        displayedGrid[row][column].setBorder(BorderFactory.createLineBorder(new Color(153,153,153)));
-                        displayedGrid[row][column].addActionListener(new GridListener());
-                        displayedGrid[row][column].setActionCommand(row + "," + column);
-                        gridPanel.add(displayedGrid[row][column]);
-                    }
-                }
-                c.gridx = 0;
-                c.gridy = 1;
-                c.gridwidth = 6;
-                c.gridheight = 1;
-                mainPanel.add(gridPanel, c);
-                
-                display();
+        display();
 
-                reset = new JButton(":)");
-                reset.setActionCommand(":)");
-                reset.addActionListener(new ResetListener());
-                reset.setPreferredSize(new Dimension(62,26));
-                c.gridx = 1;
-                c.gridy = 2;
-                c.gridwidth = 1;
-                c.gridheight = 1;
-                c.weightx = 1;
-                mainPanel.add(reset, c);
-//
-//                // Timer 
-//                timer = new Timer(500, new NextListener());
-//                timer.setRepeats(true);
-//
-//                // Step Counter
-//                stepCounter = new JLabel("0");
-//                c.gridx = 5;
-//                c.gridy = 2;
-//                c.gridwidth = 1;
-//                c.gridheight = 1;
-//                c.anchor = GridBagConstraints.LINE_END;
-//                mainPanel.add(stepCounter, c);
-                
-                gameWindow.setContentPane(mainPanel);
-                gameWindow.pack();
-                gameWindow.setResizable(false);
-                gameWindow.setLocationRelativeTo(null);
-                gameWindow.setVisible(true);
-//            }
-//        }
-//    }
+        reset = new JButton(":)");
+        reset.setActionCommand(":)");
+        reset.addActionListener(new ResetListener());
+        reset.setPreferredSize(new Dimension(62,26));
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        c.weightx = 1;
+        mainPanel.add(reset, c);
+
+        gameWindow.setContentPane(mainPanel);
+        gameWindow.pack();
+        gameWindow.setResizable(false);
+        gameWindow.setLocationRelativeTo(null);
+        gameWindow.setVisible(true);
     
 //    class MenuListener implements ActionListener {
 //        @Override
@@ -286,7 +193,8 @@ public class MinesweeperGUI {
 //                    break;
 //            }
 //        }
-//    }
+//    
+    
     }
     
     class GridListener implements ActionListener {
@@ -314,15 +222,6 @@ public class MinesweeperGUI {
                 coordsArray[i] = Integer.parseInt(temp[i]);
             }
             return coordsArray;
-        }
-        
-    }
-        
-    class StartStopListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String eventName = e.getActionCommand();
-            
         }
     }
     
@@ -389,6 +288,7 @@ public class MinesweeperGUI {
                 }
             }
         }
+        System.out.println(KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
     }
     
     private static void runGUI() {
