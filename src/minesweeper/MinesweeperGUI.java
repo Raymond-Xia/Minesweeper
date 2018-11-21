@@ -20,14 +20,15 @@ public class MinesweeperGUI {
     JPanel mainPanel;
     JPanel gridPanel;
     JLabel gameLifeTitle;
-//    private int steps;
-    private final Minesweeper board;
-    JButton[][] displayedGrid;
+    JLabel[][] displayedGrid;
     JButton reset;  
 //    Timer timer;
 //    JMenuBar menubar;
 //    JMenu file, help;
 //    JMenuItem save, load, quit, rules, about;    
+//    private int steps;
+    private Minesweeper board;
+    private final int cellSize = 40;
     
     public MinesweeperGUI() {
         /* Game Window */
@@ -86,19 +87,20 @@ public class MinesweeperGUI {
         gridPanel.setBackground(Color.lightGray);
         gridPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         gridPanel.setLayout(new GridLayout(16, 30));
+        gridPanel.addMouseListener(new GridListener());
+
 
         board = new Minesweeper(16, 30, 99);
 
-        displayedGrid = new JButton[16][30];                
+        displayedGrid = new JLabel[16][30];                
         for (int row = 0; row < displayedGrid.length; row++) {
             for (int column = 0; column < displayedGrid[row].length; column++) {
-                displayedGrid[row][column] = new JButton();
-                displayedGrid[row][column].setPreferredSize(new Dimension(40,40));
+                displayedGrid[row][column] = new JLabel();
+                displayedGrid[row][column].setPreferredSize(new Dimension(cellSize,cellSize));
+                displayedGrid[row][column].setHorizontalAlignment(JLabel.CENTER);
                 displayedGrid[row][column].setBackground(Color.gray);
                 displayedGrid[row][column].setOpaque(true);
                 displayedGrid[row][column].setBorder(BorderFactory.createLineBorder(new Color(153,153,153)));
-                displayedGrid[row][column].addActionListener(new GridListener());
-                displayedGrid[row][column].setActionCommand(row + "," + column);
                 gridPanel.add(displayedGrid[row][column]);
             }
         }
@@ -197,32 +199,30 @@ public class MinesweeperGUI {
     
     }
     
-    class GridListener implements ActionListener {
+    class GridListener implements MouseListener {        
         @Override
-        public void actionPerformed(ActionEvent e) {
-            int[] coordinates = parseCoordinates(e.getActionCommand());
-            int x = coordinates[1];
-            int y = coordinates[0];
-            
-            board.revealCell(y, x);
-            if (board.gameIsOver()) {
-                for (int row = 0; row < displayedGrid.length; row++) {
-                    for (int column = 0; column < displayedGrid[row].length; column++) {
-                        displayedGrid[row][column].setEnabled(false);
-                    } 
-                }
+        public void mouseReleased(MouseEvent e) {
+            if (!board.gameIsOver()) {
+                int x = (e.getX() - 5) / 40;
+                int y = (e.getY() - 5) / 40;
+                board.revealCell(y, x);
+                display();
             }
-            display();
         }
         
-        private int[] parseCoordinates(String coords) {
-            int[] coordsArray = new int[2]; 
-            String[] temp = coords.split(",");
-            for (int i = 0; i < temp.length; i++) {
-                coordsArray[i] = Integer.parseInt(temp[i]);
-            }
-            return coordsArray;
+        @Override
+        public void mouseClicked(MouseEvent e) {
         }
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+        @Override
+        public void mouseExited(MouseEvent e) {
+        }
+        
     }
     
     class ResetListener implements ActionListener {
@@ -276,7 +276,13 @@ public class MinesweeperGUI {
                             displayedGrid[row-1][column-1].setForeground(Color.magenta);
                             break;
                         case 6:
-                            displayedGrid[row-1][column-1].setForeground(Color.CYAN);
+                            displayedGrid[row-1][column-1].setForeground(Color.cyan);
+                            break;
+                        case 7:
+                            displayedGrid[row-1][column-1].setForeground(Color.black);
+                            break;
+                        case 8:
+                            displayedGrid[row-1][column-1].setForeground(Color.gray);
                             break;
                         default: 
                             displayedGrid[row - 1][column - 1].setForeground(Color.black);

@@ -84,9 +84,9 @@ public class Minesweeper {
     }
     
     /**
-     * Counts how many adjacent cells are alive
+     * Counts number of adjacent bombs
      * pre: cellRow and cellCol >= 0, < grid.length-2
-     * post: number of live adjacent cells is returned
+     * post: number of adjacent bombs is returned
      * @param cellRow
      * @param cellCol
      * @return 
