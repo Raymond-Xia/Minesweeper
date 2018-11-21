@@ -17,7 +17,7 @@ public class Minesweeper {
     private final Cell[][] grid;
     private int bombs;
     private int height, width;
-    private boolean gameOver;
+    private int gameOver;
     
     public Minesweeper(int h, int w, int b) {
         height = h;
@@ -50,7 +50,7 @@ public class Minesweeper {
             }
         }
         
-        gameOver = false;
+        gameOver = 0;
     }
     
     public void resetGame() {
@@ -81,7 +81,7 @@ public class Minesweeper {
             }
         }
 
-        gameOver = false;
+        gameOver = 0;
     }
     
     /**
@@ -92,7 +92,7 @@ public class Minesweeper {
      * @param cellCol
      * @return 
      */
-    public int countBombs(int cellRow, int cellCol) {
+    private int countBombs(int cellRow, int cellCol) {
         int adjBombs = 0;
         
         if (grid[cellRow-1][cellCol-1].getValue() == -1) {
@@ -131,18 +131,19 @@ public class Minesweeper {
         System.out.println((cellRow+1) + " " + (cellColumn+1));
         int number = grid[cellRow+1][cellColumn+1].getValue();
         
+        // Clicking on a bomb ends the game
         if (number == -1) {
             System.out.println("gg");
-            gameOver = true;
+            gameOver = 1;
             for (int row = 1; row < grid.length - 1; row++) {
                 for (int column = 1; column < grid[row].length - 1; column++) {
-                    if (grid[row][column].getValue() == -1) {
+                    if (grid[row][column].getValue() == -1 && !grid[row][column].isFlagged()) {
                         grid[row][column].setRevealed(true);
                     }
                 }
             }
         } else {
-            if (number == 0) {
+            if (number == 0) { // Reveals surrounding cells if the selected cell has no adjacent bombs
                 revealCell(cellRow - 1, cellColumn - 1);
                 revealCell(cellRow - 1, cellColumn);
                 revealCell(cellRow - 1, cellColumn + 1);
@@ -152,11 +153,13 @@ public class Minesweeper {
                 revealCell(cellRow + 1, cellColumn);
                 revealCell(cellRow + 1, cellColumn + 1);
             } 
-            gameOver = true;
-            for (int row = 1; row < grid.length - 1; row++) {
-                for (int column = 1; column < grid[row].length - 1; column++) {
+            
+            // If there are no more unrevealed non-bomb cells, the game is won
+            gameOver = 2;
+            for (int row = 1; row < grid.length-1; row++) {
+                for (int column = 1; column < grid[row].length-1; column++) {
                     if (grid[row][column].getValue() != -1 && !grid[row][column].isRevealed()) {
-                        gameOver = false;
+                        gameOver = 0;
                     }
                 }
             }
@@ -175,7 +178,7 @@ public class Minesweeper {
         }
     }
     
-    public boolean gameIsOver() {
+    public int gameIsOver() {
         return gameOver;
     }
     

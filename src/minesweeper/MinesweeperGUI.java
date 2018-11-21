@@ -19,14 +19,14 @@ public class MinesweeperGUI {
     JFrame gameWindow;
     JPanel mainPanel;
     JPanel gridPanel;
-    JLabel gameLifeTitle;
+    JLabel timeCounter;
+    JLabel bombCounter;
     JLabel[][] displayedGrid;
     JButton reset;  
 //    Timer timer;
 //    JMenuBar menubar;
 //    JMenu file, help;
 //    JMenuItem save, load, quit, rules, about;    
-//    private int steps;
     private Minesweeper board;
     private final int cellSize = 40;
     
@@ -72,15 +72,36 @@ public class MinesweeperGUI {
         mainPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-        // Minesweeper Title
-        gameLifeTitle = new JLabel("Minesweeper");
-        Font f = new Font("Century Gothic", Font.BOLD, 30);
-        gameLifeTitle.setFont(f);
+        // Bomb Counter
+        bombCounter = new JLabel("099");
         c.gridx = 0;
         c.gridy = 0;
-        c.gridwidth = 6;
+        c.gridwidth = 1;
         c.gridheight = 1;
-        mainPanel.add(gameLifeTitle, c);
+        c.weightx = 1;
+        mainPanel.add(bombCounter, c);
+        
+        reset = new JButton(":)");
+        reset.setActionCommand(":)");
+        reset.addActionListener(new ResetListener());
+        reset.setPreferredSize(new Dimension(62,26));
+        c.gridx = 1;
+        c.gridy = 0;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        c.weightx = 1;
+        mainPanel.add(reset, c);
+        
+        // Time Counter
+        timeCounter = new JLabel("999");
+//        Font f = new Font("Century Gothic", Font.BOLD, 30);
+//        timeCounter.setFont(f);
+        c.gridx = 2;
+        c.gridy = 0;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        c.weightx = 1;
+        mainPanel.add(timeCounter, c);
 
         // Grid
         gridPanel = new JPanel();
@@ -88,7 +109,6 @@ public class MinesweeperGUI {
         gridPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         gridPanel.setLayout(new GridLayout(16, 30));
         gridPanel.addMouseListener(new GridListener());
-
 
         board = new Minesweeper(16, 30, 99);
 
@@ -106,22 +126,12 @@ public class MinesweeperGUI {
         }
         c.gridx = 0;
         c.gridy = 1;
-        c.gridwidth = 6;
+        c.gridwidth = 3;
         c.gridheight = 1;
+        c.weightx = 1;
         mainPanel.add(gridPanel, c);
 
         display();
-
-        reset = new JButton(":)");
-        reset.setActionCommand(":)");
-        reset.addActionListener(new ResetListener());
-        reset.setPreferredSize(new Dimension(62,26));
-        c.gridx = 1;
-        c.gridy = 2;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        c.weightx = 1;
-        mainPanel.add(reset, c);
 
         gameWindow.setContentPane(mainPanel);
         gameWindow.pack();
@@ -202,7 +212,7 @@ public class MinesweeperGUI {
     class GridListener implements MouseListener {        
         @Override
         public void mouseReleased(MouseEvent e) {
-            if (!board.gameIsOver() && e.getButton() == MouseEvent.BUTTON1) {
+            if (board.gameIsOver() == 0 && e.getButton() == MouseEvent.BUTTON1) {
                 int x = (e.getX() - 5) / 40;
                 int y = (e.getY() - 5) / 40;
                 board.revealCell(y, x);
@@ -215,7 +225,7 @@ public class MinesweeperGUI {
         }
         @Override
         public void mousePressed(MouseEvent e) {
-            if (e.getButton() == MouseEvent.BUTTON3) {
+            if (board.gameIsOver() == 0 && e.getButton() == MouseEvent.BUTTON3) {
                 int x = (e.getX() - 5) / 40;
                 int y = (e.getY() - 5) / 40;
                 board.flagCell(y, x);
@@ -251,6 +261,7 @@ public class MinesweeperGUI {
      */
     private void display() {
         Cell[][] grid = board.getGrid();
+        int numFlagged = 0;
         for (int row = 1; row < grid.length-1; row++) {
             for (int column = 1; column < grid[row].length-1; column++) {
                 if (grid[row][column].isRevealed()) {
@@ -263,7 +274,7 @@ public class MinesweeperGUI {
                     }
 
                     switch (grid[row][column].getValue()) {
-                        case -1: // represented out-of-bounds border cells
+                        case -1: // represents bombs
                             displayedGrid[row-1][column-1].setForeground(Color.black);
                             break;
                         case 1:
@@ -297,11 +308,24 @@ public class MinesweeperGUI {
                 } else if (grid[row][column].isFlagged()) {
                     displayedGrid[row-1][column-1].setText("");
                     displayedGrid[row-1][column-1].setBackground(Color.red);
+                    numFlagged++;
                 } else {
                     displayedGrid[row-1][column-1].setText("");
                     displayedGrid[row-1][column-1].setBackground(Color.gray);
                 }
             }
+        }
+        bombCounter.setText("0" + (99-numFlagged));
+        switch (board.gameIsOver()) {
+            case 1:
+                reset.setText(":(");
+                break;
+            case 2:
+                reset.setText("Wow! You won!!!");
+                break;
+            default:
+                reset.setText(":)");
+                break;
         }
     }
     
