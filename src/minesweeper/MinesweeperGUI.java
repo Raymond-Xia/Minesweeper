@@ -170,7 +170,7 @@ public class MinesweeperGUI {
                 for (int row = 0; row < displayedGrid.length; row++) {
                     for (int column = 0; column < displayedGrid[row].length; column++) {
                         displayedGrid[row][column] = new JButton();
-                        displayedGrid[row][column].setPreferredSize(new Dimension(20,20));
+                        displayedGrid[row][column].setPreferredSize(new Dimension(40,40));
                         displayedGrid[row][column].setBackground(Color.gray);
                         displayedGrid[row][column].setOpaque(true);
                         displayedGrid[row][column].setBorder(BorderFactory.createLineBorder(new Color(153,153,153)));
@@ -195,6 +195,7 @@ public class MinesweeperGUI {
                 c.gridy = 2;
                 c.gridwidth = 1;
                 c.gridheight = 1;
+                c.weightx = 1;
                 mainPanel.add(reset, c);
 //
 //                // Timer 
