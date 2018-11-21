@@ -59,6 +59,7 @@ public class Minesweeper {
             for (int column = 1; column < grid[row].length-1; column++) {
                 grid[row][column].setValue(0);
                 grid[row][column].setRevealed(false);
+                grid[row][column].setFlagged(false);
             }
         }
         
