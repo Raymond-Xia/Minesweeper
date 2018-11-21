@@ -31,7 +31,7 @@ public class MinesweeperGUI {
     
     public MinesweeperGUI() {
         /* Game Window */
-        gameWindow = new JFrame("LifeGUI");
+        gameWindow = new JFrame("Minesweeper");
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 //        // Menu Bar
@@ -288,7 +288,6 @@ public class MinesweeperGUI {
                 }
             }
         }
-        System.out.println(KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner());
     }
     
     private static void runGUI() {
