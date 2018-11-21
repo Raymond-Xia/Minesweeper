@@ -122,7 +122,7 @@ public class Minesweeper {
     }
     
     public void revealCell(int cellRow, int cellColumn) {
-        if (grid[cellRow+1][cellColumn+1].isRevealed()) {
+        if (grid[cellRow+1][cellColumn+1].isRevealed() || grid[cellRow+1][cellColumn+1].isFlagged()) {
             return;
         } else {
             grid[cellRow+1][cellColumn+1].setRevealed(true);
@@ -159,6 +159,18 @@ public class Minesweeper {
                     }
                 }
             }
+        }
+    }
+    
+    public void flagCell(int cellRow, int cellColumn) {
+        if (grid[cellRow+1][cellColumn+1].isRevealed()) {
+            return;
+        }
+        
+        if (grid[cellRow+1][cellColumn+1].isFlagged()) {
+            grid[cellRow+1][cellColumn+1].setFlagged(false);
+        } else {
+            grid[cellRow+1][cellColumn+1].setFlagged(true);
         }
     }
     

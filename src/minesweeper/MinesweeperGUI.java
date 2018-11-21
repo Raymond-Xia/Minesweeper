@@ -202,7 +202,7 @@ public class MinesweeperGUI {
     class GridListener implements MouseListener {        
         @Override
         public void mouseReleased(MouseEvent e) {
-            if (!board.gameIsOver()) {
+            if (!board.gameIsOver() && e.getButton() == MouseEvent.BUTTON1) {
                 int x = (e.getX() - 5) / 40;
                 int y = (e.getY() - 5) / 40;
                 board.revealCell(y, x);
@@ -215,6 +215,12 @@ public class MinesweeperGUI {
         }
         @Override
         public void mousePressed(MouseEvent e) {
+            if (e.getButton() == MouseEvent.BUTTON3) {
+                int x = (e.getX() - 5) / 40;
+                int y = (e.getY() - 5) / 40;
+                board.flagCell(y, x);
+                display();
+            }
         }
         @Override
         public void mouseEntered(MouseEvent e) {
@@ -257,7 +263,7 @@ public class MinesweeperGUI {
                     }
 
                     switch (grid[row][column].getValue()) {
-                        case -1:
+                        case -1: // represented out-of-bounds border cells
                             displayedGrid[row-1][column-1].setForeground(Color.black);
                             break;
                         case 1:
@@ -288,6 +294,9 @@ public class MinesweeperGUI {
                             displayedGrid[row - 1][column - 1].setForeground(Color.black);
                             break;
                     }
+                } else if (grid[row][column].isFlagged()) {
+                    displayedGrid[row-1][column-1].setText("");
+                    displayedGrid[row-1][column-1].setBackground(Color.red);
                 } else {
                     displayedGrid[row-1][column-1].setText("");
                     displayedGrid[row-1][column-1].setBackground(Color.gray);

@@ -14,13 +14,14 @@ package minesweeper;
 public class Cell {
     private int value;
     private int x, y;
-    private boolean revealed;
+    private boolean revealed, flagged;
     
     public Cell(int x, int y) {
         value = 0;
         this.x = x;
         this.y = y;
         revealed = true;
+        flagged = false;
     }
     
     public int getValue() {
@@ -39,12 +40,20 @@ public class Cell {
         return revealed;
     }
     
+    public boolean isFlagged() {
+        return flagged;
+    }
+    
     public void setValue(int v) {
         value = v;
     }
     
     public void setRevealed(boolean r) {
         revealed = r;
+    }
+    
+    public void setFlagged(boolean f) {
+        flagged = f;
     }
     
 }
