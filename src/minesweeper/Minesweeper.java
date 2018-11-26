@@ -44,7 +44,7 @@ public class Minesweeper {
         for (int row = 1; row < grid.length-1; row++) {
             for (int column = 1; column < grid[0].length-1; column++) {
                 if (grid[row][column].getValue() != -1) {
-                    grid[row][column].setValue(countBombs(row, column));
+                    grid[row][column].setValue(countAdjBombs(row, column));
                     grid[row][column].setRevealed(false);
                 }
             }
@@ -76,7 +76,7 @@ public class Minesweeper {
         for (int row = 1; row < grid.length - 1; row++) {
             for (int column = 1; column < grid[0].length - 1; column++) {
                 if (grid[row][column].getValue() != -1) {
-                    grid[row][column].setValue(countBombs(row, column));
+                    grid[row][column].setValue(countAdjBombs(row, column));
                 }
             }
         }
@@ -92,7 +92,7 @@ public class Minesweeper {
      * @param cellCol
      * @return 
      */
-    private int countBombs(int cellRow, int cellCol) {
+    public int countAdjBombs(int cellRow, int cellCol) {
         int adjBombs = 0;
         
         if (grid[cellRow-1][cellCol-1].getValue() == -1) {
@@ -143,15 +143,8 @@ public class Minesweeper {
                 }
             }
         } else {
-            if (number == 0) { // Reveals surrounding cells if the selected cell has no adjacent bombs
-                revealCell(cellRow - 1, cellColumn - 1);
-                revealCell(cellRow - 1, cellColumn);
-                revealCell(cellRow - 1, cellColumn + 1);
-                revealCell(cellRow, cellColumn - 1);
-                revealCell(cellRow, cellColumn + 1);
-                revealCell(cellRow + 1, cellColumn - 1);
-                revealCell(cellRow + 1, cellColumn);
-                revealCell(cellRow + 1, cellColumn + 1);
+            if (number == 0) { 
+                revealAdjCells(cellRow, cellColumn);
             } 
             
             // If there are no more unrevealed non-bomb cells, the game is won
@@ -166,6 +159,18 @@ public class Minesweeper {
         }
     }
     
+        
+    public void revealAdjCells(int cellRow, int cellColumn) {
+        revealCell(cellRow - 1, cellColumn - 1);
+        revealCell(cellRow - 1, cellColumn);
+        revealCell(cellRow - 1, cellColumn + 1);
+        revealCell(cellRow, cellColumn - 1);
+        revealCell(cellRow, cellColumn + 1);
+        revealCell(cellRow + 1, cellColumn - 1);
+        revealCell(cellRow + 1, cellColumn);
+        revealCell(cellRow + 1, cellColumn + 1);
+    }
+    
     public void flagCell(int cellRow, int cellColumn) {
         if (grid[cellRow+1][cellColumn+1].isRevealed()) {
             return;
@@ -176,6 +181,36 @@ public class Minesweeper {
         } else {
             grid[cellRow+1][cellColumn+1].setFlagged(true);
         }
+    }
+    
+    public int countAdjFlags(int cellRow, int cellColumn) {
+        int adjFlags = 0;
+
+        if (grid[cellRow - 1][cellColumn - 1].isFlagged()) {
+            adjFlags++;
+        }
+        if (grid[cellRow - 1][cellColumn].isFlagged()) {
+            adjFlags++;
+        }
+        if (grid[cellRow - 1][cellColumn + 1].isFlagged()) {
+            adjFlags++;
+        }
+        if (grid[cellRow][cellColumn - 1].isFlagged()) {
+            adjFlags++;
+        }
+        if (grid[cellRow][cellColumn + 1].isFlagged()) {
+            adjFlags++;
+        }
+        if (grid[cellRow + 1][cellColumn - 1].isFlagged()) {
+            adjFlags++;
+        }
+        if (grid[cellRow + 1][cellColumn].isFlagged()) {
+            adjFlags++;
+        }
+        if (grid[cellRow + 1][cellColumn + 1].isFlagged()) {
+            adjFlags++;
+        }
+        return adjFlags;
     }
     
     public int gameIsOver() {

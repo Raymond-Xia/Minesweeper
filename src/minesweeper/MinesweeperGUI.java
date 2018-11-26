@@ -212,11 +212,21 @@ public class MinesweeperGUI {
     class GridListener implements MouseListener {        
         @Override
         public void mouseReleased(MouseEvent e) {
-            if (board.gameIsOver() == 0 && e.getButton() == MouseEvent.BUTTON1) {
+            if (board.gameIsOver() == 0 ) {
                 int x = (e.getX() - 5) / 40;
                 int y = (e.getY() - 5) / 40;
-                board.revealCell(y, x);
-                display();
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    board.revealCell(y, x);
+                    display();
+                } else if (e.getButton() == MouseEvent.BUTTON2) {
+                    System.out.println("jejfjejf");
+                    Cell cell = board.getGrid()[y+1][x+1];
+//                    System.out.println(cell.getValue() + "__" + board.countAdjFlags(y+1, x+1));
+                    if (cell.isRevealed() && cell.getValue() == board.countAdjFlags(y+1, x+1)) {
+                        board.revealAdjCells(y, x);
+                        display();
+                    }
+                }
             }
         }
         
