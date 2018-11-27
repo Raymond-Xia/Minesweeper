@@ -209,25 +209,27 @@ public class MinesweeperGUI {
     
     }
     
-    class GridListener implements MouseListener {        
+    class GridListener implements MouseListener {
+        int mButtonsPressed = 0;
         @Override
         public void mouseReleased(MouseEvent e) {
             if (board.gameIsOver() == 0 ) {
                 int x = (e.getX() - 5) / 40;
                 int y = (e.getY() - 5) / 40;
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                    board.revealCell(y, x);
-                    display();
-                } else if (e.getButton() == MouseEvent.BUTTON2) {
-                    System.out.println("jejfjejf");
+                if (mButtonsPressed == 1) {
+                    if (e.getButton() == MouseEvent.BUTTON1) {
+                        board.revealCell(y, x);
+                        display();
+                    }
+                } else {
                     Cell cell = board.getGrid()[y+1][x+1];
-//                    System.out.println(cell.getValue() + "__" + board.countAdjFlags(y+1, x+1));
                     if (cell.isRevealed() && cell.getValue() == board.countAdjFlags(y+1, x+1)) {
                         board.revealAdjCells(y, x);
                         display();
                     }
                 }
             }
+            mButtonsPressed--;
         }
         
         @Override
@@ -235,11 +237,16 @@ public class MinesweeperGUI {
         }
         @Override
         public void mousePressed(MouseEvent e) {
-            if (board.gameIsOver() == 0 && e.getButton() == MouseEvent.BUTTON3) {
-                int x = (e.getX() - 5) / 40;
-                int y = (e.getY() - 5) / 40;
-                board.flagCell(y, x);
-                display();
+            if (board.gameIsOver() == 0) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    int x = (e.getX() - 5) / 40;
+                    int y = (e.getY() - 5) / 40;
+                    board.flagCell(y, x);
+                    display();
+                    mButtonsPressed++;
+                } else if (e.getButton() == MouseEvent.BUTTON1) {
+                    mButtonsPressed++;
+                }
             }
         }
         @Override
