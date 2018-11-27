@@ -228,8 +228,8 @@ public class MinesweeperGUI {
                         display();
                     }
                 }
+                mButtonsPressed--;
             }
-            mButtonsPressed--;
         }
         
         @Override
@@ -237,6 +237,7 @@ public class MinesweeperGUI {
         }
         @Override
         public void mousePressed(MouseEvent e) {
+            System.out.println(mButtonsPressed);
             if (board.gameIsOver() == 0) {
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     int x = (e.getX() - 5) / 40;
