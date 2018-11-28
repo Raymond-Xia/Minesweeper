@@ -28,25 +28,11 @@ public class Minesweeper {
                 grid[row][column] = new Cell(column, row);
             }
         }
-        
         bombs = b;
-        Random r = new Random();
-        int x, y;
-        for (int i = 0; i < bombs; i++) {
-            do {
-                x = r.nextInt(width);
-                y = r.nextInt(height);
-            } while (grid[y+1][x+1].getValue() == -1);    
-            grid[y+1][x+1].setValue(-1);
-            grid[y+1][x+1].setRevealed(false);
-        }
         
         for (int row = 1; row < grid.length-1; row++) {
-            for (int column = 1; column < grid[0].length-1; column++) {
-                if (grid[row][column].getValue() != -1) {
-                    grid[row][column].setValue(countAdjBombs(row, column));
-                    grid[row][column].setRevealed(false);
-                }
+            for (int column = 1; column < grid[row].length-1; column++) {
+                grid[row][column].setRevealed(false);
             }
         }
         
@@ -62,15 +48,23 @@ public class Minesweeper {
                 grid[row][column].setFlagged(false);
             }
         }
-        
+
+        gameOver = 0;
+    }
+    
+    public void generateBoard(int startY, int startX) {
+//        System.out.println("X: " + startX + "; Y: " + startY);
         Random r = new Random();
         int x, y;
+        boolean adjacent;
         for (int i = 0; i < bombs; i++) {
             do {
                 x = r.nextInt(width);
                 y = r.nextInt(height);
-            } while (grid[y + 1][x + 1].getValue() == -1);
-            grid[y+1][x+1].setValue(-1);
+                adjacent = x >= startX-1 && x <= startX+1 && y >= startY-1 && y <= startY+1;
+            } while (grid[y + 1][x + 1].getValue() == -1 || adjacent);
+//            System.out.println("x=" + x + "; y=" + y);
+            grid[y + 1][x + 1].setValue(-1);
         }
 
         for (int row = 1; row < grid.length - 1; row++) {
@@ -81,7 +75,6 @@ public class Minesweeper {
             }
         }
 
-        gameOver = 0;
     }
     
     /**

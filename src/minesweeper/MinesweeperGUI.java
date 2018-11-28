@@ -222,6 +222,10 @@ public class MinesweeperGUI {
             if (board.gameIsOver() == 0 ) {
                 int x = (e.getX() - 5) / 40;
                 int y = (e.getY() - 5) / 40;
+                if (!timer.isRunning()) {
+                    board.generateBoard(y, x);
+                }
+                
                 if (mButtonsPressed == 1) {
                     if (e.getButton() == MouseEvent.BUTTON1) {
                         board.revealCell(y, x);
@@ -239,6 +243,7 @@ public class MinesweeperGUI {
             } 
 //            System.out.println(mButtonsPressed);
 //            System.out.println("Game is over: " + board.gameIsOver());
+//            System.out.println(timer.isRunning());
         }
         
         @Override
@@ -246,17 +251,16 @@ public class MinesweeperGUI {
         }
         @Override
         public void mousePressed(MouseEvent e) {
-            if (board.gameIsOver() == 0) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
-                    int x = (e.getX() - 5) / 40;
-                    int y = (e.getY() - 5) / 40;
-                    board.flagCell(y, x);
-                    display();
-                    mButtonsPressed++;
-                } else if (e.getButton() == MouseEvent.BUTTON1) {
-                    mButtonsPressed++;
-                }
+            if (e.getButton() == MouseEvent.BUTTON3) {
+                int x = (e.getX() - 5) / 40;
+                int y = (e.getY() - 5) / 40;
+                board.flagCell(y, x);
+                display();
+                mButtonsPressed++;
+            } else if (e.getButton() == MouseEvent.BUTTON1) {
+                mButtonsPressed++;
             }
+            
 //            System.out.println(mButtonsPressed);
         }
         @Override
@@ -282,11 +286,7 @@ public class MinesweeperGUI {
     class ResetListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            for (int row = 0; row < displayedGrid.length; row++) {
-                for (int column = 0; column < displayedGrid[row].length; column++) {
-                    displayedGrid[row][column].setEnabled(true);
-                }
-            }
+            timer.stop();
             board.resetGame();
             time = -1;
             timeCounter.setText("999");
