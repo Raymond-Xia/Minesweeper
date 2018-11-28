@@ -23,12 +23,13 @@ public class MinesweeperGUI {
     JLabel bombCounter;
     JLabel[][] displayedGrid;
     JButton reset;  
-//    Timer timer;
+    Timer timer;
 //    JMenuBar menubar;
 //    JMenu file, help;
 //    JMenuItem save, load, quit, rules, about;    
     private Minesweeper board;
     private final int cellSize = 40;
+    private int time;
     
     public MinesweeperGUI() {
         /* Game Window */
@@ -102,7 +103,12 @@ public class MinesweeperGUI {
         c.gridheight = 1;
         c.weightx = 1;
         mainPanel.add(timeCounter, c);
-
+        
+        timer = new Timer(1000, new TimerListener());
+        timer.setInitialDelay(0);
+        timer.setRepeats(true);
+        time = -1;
+        
         // Grid
         gridPanel = new JPanel();
         gridPanel.setBackground(Color.lightGray);
@@ -220,6 +226,7 @@ public class MinesweeperGUI {
                     if (e.getButton() == MouseEvent.BUTTON1) {
                         board.revealCell(y, x);
                         display();
+                        timer.start();
                     }
                 } else {
                     Cell cell = board.getGrid()[y+1][x+1];
@@ -229,7 +236,8 @@ public class MinesweeperGUI {
                     }
                 }
                 mButtonsPressed--;
-            }
+            } 
+//            System.out.println(mButtonsPressed);
         }
         
         @Override
@@ -237,7 +245,6 @@ public class MinesweeperGUI {
         }
         @Override
         public void mousePressed(MouseEvent e) {
-            System.out.println(mButtonsPressed);
             if (board.gameIsOver() == 0) {
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     int x = (e.getX() - 5) / 40;
@@ -249,6 +256,7 @@ public class MinesweeperGUI {
                     mButtonsPressed++;
                 }
             }
+//            System.out.println(mButtonsPressed);
         }
         @Override
         public void mouseEntered(MouseEvent e) {
@@ -257,6 +265,16 @@ public class MinesweeperGUI {
         public void mouseExited(MouseEvent e) {
         }
         
+    }
+    
+    class TimerListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (time < 1000) {
+                time++;
+                timeCounter.setText(time + "");
+            }
+        }
     }
     
     class ResetListener implements ActionListener {
@@ -268,6 +286,8 @@ public class MinesweeperGUI {
                 }
             }
             board.resetGame();
+            time = -1;
+            timeCounter.setText("999");
             display();
         }
     }
@@ -333,15 +353,17 @@ public class MinesweeperGUI {
                 }
             }
         }
-        bombCounter.setText("0" + (99-numFlagged));
         switch (board.gameIsOver()) {
             case 1:
+                timer.stop();
                 reset.setText(":(");
                 break;
             case 2:
+                timer.stop();
                 reset.setText("Wow! You won!!!");
                 break;
             default:
+                bombCounter.setText("0" + (99 - numFlagged));
                 reset.setText(":)");
                 break;
         }

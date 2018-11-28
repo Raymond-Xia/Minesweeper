@@ -92,7 +92,7 @@ public class Minesweeper {
      * @param cellCol
      * @return 
      */
-    public int countAdjBombs(int cellRow, int cellCol) {
+    private int countAdjBombs(int cellRow, int cellCol) {
         int adjBombs = 0;
         
         if (grid[cellRow-1][cellCol-1].getValue() == -1) {
@@ -128,7 +128,7 @@ public class Minesweeper {
         } else {
             grid[cellRow+1][cellColumn+1].setRevealed(true);
         }
-        System.out.println((cellRow+1) + " " + (cellColumn+1));
+//        System.out.println((cellRow+1) + " " + (cellColumn+1));
         int number = grid[cellRow+1][cellColumn+1].getValue();
         
         // Clicking on a bomb ends the game
