@@ -368,7 +368,6 @@ public class MinesweeperGUI {
                 break;
             case 2:
                 timer.stop();
-                reset.setText("Wow! You won!!!");
                 
                 JFrame winFrame = new JFrame("You won!");
                 
