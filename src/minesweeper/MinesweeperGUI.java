@@ -278,7 +278,13 @@ public class MinesweeperGUI {
         public void actionPerformed(ActionEvent e) {
             if (time < 1000) {
                 time++;
-                timeCounter.setText(time + "");
+                if (time/10 == 0) {
+                    timeCounter.setText("00" + time);
+                } else if (time/10 < 10) {
+                    timeCounter.setText("0" + time);
+                } else if (time/10 < 100) {
+                    timeCounter.setText("" + time);
+                }
             }
         }
     }
@@ -363,6 +369,25 @@ public class MinesweeperGUI {
             case 2:
                 timer.stop();
                 reset.setText("Wow! You won!!!");
+                
+                JFrame winFrame = new JFrame("You won!");
+                
+                JPanel winPanel = new JPanel();
+                winPanel.setLayout(new BoxLayout(winPanel, BoxLayout.PAGE_AXIS));
+                winPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                
+                JLabel winMsg = new JLabel("Congratulations!");
+                winMsg.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+                winPanel.add(winMsg);
+                
+                JLabel winTime = new JLabel("You beat the game in " + time + " seconds.");
+                winTime.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+                winPanel.add(winTime);
+                
+                winFrame.setContentPane(winPanel);
+                winFrame.pack();
+                winFrame.setLocationRelativeTo(null);
+                winFrame.setVisible(true);                
                 break;
             default:
                 bombCounter.setText("0" + (99 - numFlagged));

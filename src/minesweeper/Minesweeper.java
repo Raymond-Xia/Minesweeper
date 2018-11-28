@@ -40,7 +40,6 @@ public class Minesweeper {
     }
     
     public void resetGame() {
-        
         for (int row = 1; row < grid.length-1; row++) {
             for (int column = 1; column < grid[row].length-1; column++) {
                 grid[row][column].setValue(0);
@@ -48,7 +47,6 @@ public class Minesweeper {
                 grid[row][column].setFlagged(false);
             }
         }
-
         gameOver = 0;
     }
     
