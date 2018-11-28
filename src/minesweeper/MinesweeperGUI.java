@@ -225,8 +225,8 @@ public class MinesweeperGUI {
                 if (mButtonsPressed == 1) {
                     if (e.getButton() == MouseEvent.BUTTON1) {
                         board.revealCell(y, x);
-                        display();
                         timer.start();
+                        display();
                     }
                 } else {
                     Cell cell = board.getGrid()[y+1][x+1];
@@ -238,6 +238,7 @@ public class MinesweeperGUI {
                 mButtonsPressed--;
             } 
 //            System.out.println(mButtonsPressed);
+//            System.out.println("Game is over: " + board.gameIsOver());
         }
         
         @Override
@@ -260,6 +261,7 @@ public class MinesweeperGUI {
         }
         @Override
         public void mouseEntered(MouseEvent e) {
+            mButtonsPressed = 0;
         }
         @Override
         public void mouseExited(MouseEvent e) {
