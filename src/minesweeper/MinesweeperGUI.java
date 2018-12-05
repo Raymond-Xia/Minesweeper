@@ -276,8 +276,8 @@ public class MinesweeperGUI {
     class TimerListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            time++;
             if (time < 1000) {
-                time++;
                 if (time/10 == 0) {
                     timeCounter.setText("00" + time);
                 } else if (time/10 < 10) {
